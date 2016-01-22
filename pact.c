@@ -15,11 +15,10 @@
 
 #define NAME_SIZE 128
 
-#define PRINT_DEBUG 1
 #ifdef PRINT_DEBUG
 #define DEBUG(...) fprintf(stdout, __VA_ARGS__)
 #else
-#define DEBUG(...) ()
+#define DEBUG(...)
 #endif
 #define ERROR(...) fprintf(stderr, __VA_ARGS__)
 
