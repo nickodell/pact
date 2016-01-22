@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
 	if(ret > 0) {
 		exit(0);
 	} else if(ret < 0) {
-		ERROR("Cannot fork()");
+		ERROR("Cannot fork()\n");
 	} else if(ret == 0) {
 		// We're the child, continue with the program
 	}
