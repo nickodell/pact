@@ -7,3 +7,5 @@ endif
 pact: pact.c
 	gcc pact.c ${CFLAGS} -o pact
 
+clean:
+	rm pact
