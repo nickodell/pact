@@ -104,7 +104,8 @@ int main(int argc, char *argv[]) {
 		for(int i = 0; i < numProcs; i++) {
 			pid_t pid = procs[i].pid;
 			if(kill(pid, 0) == -1) {
-				// Process no longer exists
+				// Process no longer exists, don't kill it
+				// later
 				procs[i].procChanged = true;
 				// Don't start killing processes if we got
 				// the K modifier for this process
