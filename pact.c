@@ -13,7 +13,6 @@
 #include <time.h>
 #include <sys/time.h>
 
-#define NAME_SIZE 128
 
 #ifdef PRINT_DEBUG
 #define DEBUG(...) fprintf(stdout, __VA_ARGS__)
@@ -27,7 +26,6 @@ struct child_proc {
 	bool monitorProc;
 	bool killProc;
 	bool procChanged;
-	char name[NAME_SIZE];
 };
 
 bool killAll = false;
@@ -36,10 +34,6 @@ void on_SIGTERM(int signal) {
 	killAll = true;
 }
 
-int get_proc_name(pid_t pid, char* name, size_t num) {
-	strncpy(name, "jeff", num);
-	return 0;
-}
 
 int main(int argc, char *argv[]) {
 	// Trap SIGTERM
@@ -88,7 +82,6 @@ int main(int argc, char *argv[]) {
 			procs[i].monitorProc = true;
 			procs[i].killProc = true;
 		}
-		get_proc_name(pid, procs[i].name, NAME_SIZE);
 		if(ret != 1) {
 			ERROR("Error - \"%s\" is not a valid argument.\n", currentArg);
 			killAll = true;
@@ -110,19 +103,15 @@ int main(int argc, char *argv[]) {
 	while(!killAll) {
 		for(int i = 0; i < numProcs; i++) {
 			pid_t pid = procs[i].pid;
-			if(!procs[i].procChanged) {
-				char name[NAME_SIZE];
-				get_proc_name(pid, name, NAME_SIZE);
-				if(strncmp(name, procs[i].name, \
-				    NAME_SIZE) != 0) {
-					DEBUG("Process name changed\n");
-					procs[i].procChanged = true;
-				}
-			}
-			if(procs[i].monitorProc && kill(pid, 0) == -1) {
+			if(kill(pid, 0) == -1) {
 				// Process no longer exists
-				killAll = true;
-				break;
+				procs[i].procChanged = true;
+				// Don't start killing processes if we got
+				// the K modifier for this process
+				if(procs[i].monitorProc) {
+					killAll = true;
+					break;
+				}
 			}
 		}
 		if(!killAll) {
