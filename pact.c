@@ -47,7 +47,9 @@ int main(int argc, char *argv[]) {
 	// to a process
 	if(argc < 2) {
 		ERROR("You must give pact some PID's!\n");
-		// XXX add usage
+		ERROR("Usage: ");
+		ERROR(argv[0]);
+		ERROR(" [K/M]PID ...\n");
 		return 42;
 	}
 	struct child_proc procs[numProcs];
