@@ -6,5 +6,8 @@ endif
 pact: pact.c
 	gcc pact.c ${CFLAGS} -o pact
 
+install: pact
+	cp pact /bin/pact
+
 clean:
 	rm -f pact
